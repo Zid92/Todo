@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToFo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="container" id="app">
+        <h1>Vue To-Do List</h1>
+        <div class="app">
+            <section class="new-task" id="new-task">
+                <input type="checkbox" name="check-all" id="check-all" :checked="areAllChecked" @click="checkAll">
+                <input type="text" name="new-input" id="new-input" placeholder="What do you need to do?" autofocus v-model="newTask" @keyup.enter="addTask">
+            </section>
+            <ul class="list" v-if="loaded">
+                <li  v-for="task in activeList" :key="task.id">
+                    <input type="checkbox" v-model="task.checked" :id="'check-'+task.id" class="check">
+                    <input type="checkbox" v-model="task.starred" :id="'star-'+task.id" class="star">
+                    <label :for="'task-'+task.id" :class="{checked: task.checked, starred: task.starred}">{{ task.text }}</label>
+                    <button class="delete" @click="removeTask(task)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </li>
+            </ul>
+            <ul class="foot-buttons">
+                <li>
+                    <button @click="removeChecked">Clear Completed</button>
+                </li>
+                <li>
+                    <button @click="activeList = taskList" :class="{active: queryList(taskList)}">All tasks</button>
+                </li>
+                <li>
+                    <button @click="activeList = starredList" :class="{active: queryList(starredList)}">Important</button>
+                </li>
+                <li>
+                    <button @click="activeList = uncheckedList" :class="{active: queryList(uncheckedList)}">Active</button>
+                </li>
+                <li>
+                    <button @click="activeList = checkedList" :class="{active: queryList(checkedList)}">Completed</button>
+                </li>
+            </ul>
+        </div>
+        <p class="counter" v-if="loaded">{{ checkCount }} / {{ taskCount }} Tasks Completed</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script>
+    <script src="Component.vue"></script>
+</body>
+</html>
